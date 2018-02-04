@@ -32,9 +32,11 @@ public class Frame extends JFrame implements ActionListener {
 	private JButton btnPush;
 	private JTextField textField_5;
 	private JTextField txtTable;
+	private JButton btnSave;
+	private JButton btnLoad;
 	public Frame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 300);
+		setBounds(100, 100, 700, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -91,30 +93,31 @@ public class Frame extends JFrame implements ActionListener {
 		txtFilter.setColumns(10);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(434, 33, 140, 20);
+		textField_2.setBounds(456, 34, 218, 20);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
 		txtKey = new JTextField();
+		txtKey.setEditable(false);
 		txtKey.setText("Key:");
-		txtKey.setBounds(434, 140, 32, 20);
+		txtKey.setBounds(456, 139, 32, 20);
 		contentPane.add(txtKey);
 		txtKey.setColumns(10);
 		
 		textField_3 = new JTextField();
-		textField_3.setBounds(434, 160, 140, 20);
+		textField_3.setBounds(456, 157, 218, 20);
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 		
 		txtData = new JTextField();
 		txtData.setEditable(false);
 		txtData.setText("Data:");
-		txtData.setBounds(434, 188, 39, 20);
+		txtData.setBounds(456, 188, 39, 20);
 		contentPane.add(txtData);
 		txtData.setColumns(10);
 		
 		textField_4 = new JTextField();
-		textField_4.setBounds(434, 207, 140, 20);
+		textField_4.setBounds(456, 207, 218, 20);
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
 		
@@ -124,16 +127,26 @@ public class Frame extends JFrame implements ActionListener {
 		contentPane.add(btnPush);
 		
 		textField_5 = new JTextField();
-		textField_5.setBounds(434, 114, 140, 20);
+		textField_5.setBounds(456, 115, 218, 20);
 		contentPane.add(textField_5);
 		textField_5.setColumns(10);
 		
 		txtTable = new JTextField();
 		txtTable.setEditable(false);
 		txtTable.setText("Table:");
-		txtTable.setBounds(434, 95, 45, 20);
+		txtTable.setBounds(456, 95, 45, 20);
 		contentPane.add(txtTable);
 		txtTable.setColumns(10);
+		
+		btnSave = new JButton("Save");
+		btnSave.setBounds(456, 65, 89, 23);
+		btnSave.addActionListener(this);
+		contentPane.add(btnSave);
+		
+		btnLoad = new JButton("Load");
+		btnLoad.addActionListener(this);
+		btnLoad.setBounds(585, 65, 89, 23);
+		contentPane.add(btnLoad);
 		
 		setVisible(true);
 		new Thread(new Runnable(){
@@ -172,6 +185,14 @@ public class Frame extends JFrame implements ActionListener {
 		}else if(e.getSource() == btnPush){
 			if(!btnUseIp.isEnabled() && !btnUseTeam.isEnabled()){
 				NetworkTablesClient.push(textField_5.getText(),textField_3.getText(),textField_4.getText());
+			}
+		}else if(e.getSource() == btnSave){
+			if(!btnUseIp.isEnabled() && !btnUseTeam.isEnabled()){
+				NetworkTablesClient.save();
+			}
+		}else if(e.getSource() == btnLoad){
+			if(!btnUseIp.isEnabled() && !btnUseTeam.isEnabled()){
+				NetworkTablesClient.load();
 			}
 		}
 	}
