@@ -117,6 +117,27 @@ public class NetworkTablesClient {
 			} else if (entry.getValue().isBoolean()) {
 				frame.println(currentPath + key + ": " + (entry.getValue().getBoolean()));
 				System.out.println(currentPath + key + ": " + (entry.getValue().getBoolean()));
+			} else if(entry.getValue().isBooleanArray()){
+				String data = "";
+				for(boolean b : entry.getValue().getBooleanArray()){
+					data += b+" : ";
+				}
+				data = data.substring(0,data.length()-3);
+				frame.println(currentPath+key+": "+data);
+			}else if(entry.getValue().isDoubleArray()){
+				String data = "";
+				for(double d : entry.getValue().getDoubleArray()){
+					data += d+" : ";
+				}
+				data = data.substring(0,data.length()-3);
+				frame.println(currentPath+key+": "+data);
+			}else if(entry.getValue().isStringArray()){
+				String data = "";
+				for(String s : entry.getValue().getStringArray()){
+					data += s+" : ";
+				}
+				data = data.substring(0,data.length()-3);
+				frame.println(currentPath+key+": "+data);
 			}
 		}
 		for (String subTable : table.getSubTables()) {
