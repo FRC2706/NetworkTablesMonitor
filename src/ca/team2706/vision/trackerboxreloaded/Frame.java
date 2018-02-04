@@ -34,6 +34,7 @@ public class Frame extends JFrame implements ActionListener {
 	private JTextField txtTable;
 	private JButton btnSave;
 	private JButton btnLoad;
+	private JButton btnPushArray;
 	public Frame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 300);
@@ -122,7 +123,7 @@ public class Frame extends JFrame implements ActionListener {
 		textField_4.setColumns(10);
 		
 		btnPush = new JButton("Push");
-		btnPush.setBounds(461, 238, 89, 23);
+		btnPush.setBounds(456, 238, 89, 23);
 		btnPush.addActionListener(this);
 		contentPane.add(btnPush);
 		
@@ -147,6 +148,11 @@ public class Frame extends JFrame implements ActionListener {
 		btnLoad.addActionListener(this);
 		btnLoad.setBounds(585, 65, 89, 23);
 		contentPane.add(btnLoad);
+		
+		btnPushArray = new JButton("Push Array");
+		btnPushArray.setBounds(563, 238, 111, 23);
+		btnPushArray.addActionListener(this);
+		contentPane.add(btnPushArray);
 		
 		setVisible(true);
 		new Thread(new Runnable(){
@@ -193,6 +199,10 @@ public class Frame extends JFrame implements ActionListener {
 		}else if(e.getSource() == btnLoad){
 			if(!btnUseIp.isEnabled() && !btnUseTeam.isEnabled()){
 				NetworkTablesClient.load();
+			}
+		}else if(e.getSource() == btnPushArray){
+			if(!btnUseIp.isEnabled() && !btnUseTeam.isEnabled()){
+				NetworkTablesClient.pushArray(textField_5.getText(),textField_3.getText(),textField_4.getText());
 			}
 		}
 	}
