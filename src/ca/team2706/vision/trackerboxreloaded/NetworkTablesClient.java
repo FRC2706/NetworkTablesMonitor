@@ -124,7 +124,30 @@ public class NetworkTablesClient {
 
 	public static void push(String table,String key, String data) {
 		NetworkTable networkTable = instance.getTable(table);
-		networkTable.getEntry(key).setString(data);
-		
+		if(isDouble(data)){
+			networkTable.getEntry(key).setDouble(Double.valueOf(data));
+		}else if(isBoolean(data)){
+			networkTable.getEntry(key).setBoolean(Boolean.valueOf(data));
+		}else{
+			networkTable.getEntry(key).setString(data);
+		}
+	}
+	@SuppressWarnings("unused")
+	private static boolean isDouble(String string){
+		try{
+			double d = Double.valueOf(string);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
+	}
+	@SuppressWarnings("unused")
+	private static boolean isBoolean(String string){
+		try{
+			boolean b = Boolean.valueOf(string);
+			return true;
+		}catch(Exception e){
+			return false;
+		}
 	}
 }

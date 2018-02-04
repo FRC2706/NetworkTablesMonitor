@@ -86,12 +86,12 @@ public class Frame extends JFrame implements ActionListener {
 		txtFilter = new JTextField();
 		txtFilter.setEditable(false);
 		txtFilter.setText("Filter:");
-		txtFilter.setBounds(434, 34, 45, 20);
+		txtFilter.setBounds(456, 11, 45, 20);
 		contentPane.add(txtFilter);
 		txtFilter.setColumns(10);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(434, 67, 140, 20);
+		textField_2.setBounds(434, 33, 140, 20);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
@@ -140,7 +140,7 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void run() {
 				while(true){
-					NetworkTablesClient.filter = textField_2.getText().replaceAll("\\", "/");
+					NetworkTablesClient.filter = textField_2.getText();
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -180,5 +180,8 @@ public class Frame extends JFrame implements ActionListener {
 	}
 	public void clear(){
 		textArea.setText("");
+		for(int i = 0; i < 5; i++){
+			System.out.println();
+		}
 	}
 }
