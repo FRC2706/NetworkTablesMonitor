@@ -10,6 +10,7 @@ public class NetworkTablesClient {
 	public static Frame frame;
 	public static String filter = "";
 	private static boolean done = false;
+	public static NetworkTableInstance instance;
 	@SuppressWarnings("resource")
 	public static void main(String[] args){
 		frame = new Frame();
@@ -30,7 +31,7 @@ public class NetworkTablesClient {
 			return;
 		}
 		done = true;
-		NetworkTableInstance instance = NetworkTableInstance.getDefault();
+		instance = NetworkTableInstance.getDefault();
 		instance.setUpdateRate(0.02);
 		instance.startClient(ip);
 		
@@ -69,7 +70,7 @@ public class NetworkTablesClient {
 			return;
 		}
 		done = true;
-		NetworkTableInstance instance = NetworkTableInstance.getDefault();
+		instance = NetworkTableInstance.getDefault();
 		instance.setUpdateRate(0.02);
 		instance.startClientTeam(team);
 		
@@ -119,5 +120,11 @@ public class NetworkTablesClient {
 			NetworkTable subtable = table.getSubTable(subTable);
 			recursiveSearch(subtable, currentPath+subTable+"/");
 		}
+	}
+
+	public static void push(String table,String key, String data) {
+		NetworkTable networkTable = instance.getTable(table);
+		networkTable.getEntry(key).setString(data);
+		
 	}
 }

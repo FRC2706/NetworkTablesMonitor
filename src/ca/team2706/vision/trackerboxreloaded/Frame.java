@@ -25,7 +25,13 @@ public class Frame extends JFrame implements ActionListener {
 	private JButton btnUseIp;
 	private JTextField txtFilter;
 	private JTextField textField_2;
-	
+	private JTextField txtKey;
+	private JTextField textField_3;
+	private JTextField txtData;
+	private JTextField textField_4;
+	private JButton btnPush;
+	private JTextField textField_5;
+	private JTextField txtTable;
 	public Frame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 600, 300);
@@ -89,6 +95,46 @@ public class Frame extends JFrame implements ActionListener {
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
+		txtKey = new JTextField();
+		txtKey.setText("Key:");
+		txtKey.setBounds(434, 140, 32, 20);
+		contentPane.add(txtKey);
+		txtKey.setColumns(10);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(434, 160, 140, 20);
+		contentPane.add(textField_3);
+		textField_3.setColumns(10);
+		
+		txtData = new JTextField();
+		txtData.setEditable(false);
+		txtData.setText("Data:");
+		txtData.setBounds(434, 188, 39, 20);
+		contentPane.add(txtData);
+		txtData.setColumns(10);
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(434, 207, 140, 20);
+		contentPane.add(textField_4);
+		textField_4.setColumns(10);
+		
+		btnPush = new JButton("Push");
+		btnPush.setBounds(461, 238, 89, 23);
+		btnPush.addActionListener(this);
+		contentPane.add(btnPush);
+		
+		textField_5 = new JTextField();
+		textField_5.setBounds(434, 114, 140, 20);
+		contentPane.add(textField_5);
+		textField_5.setColumns(10);
+		
+		txtTable = new JTextField();
+		txtTable.setEditable(false);
+		txtTable.setText("Table:");
+		txtTable.setBounds(434, 95, 45, 20);
+		contentPane.add(txtTable);
+		txtTable.setColumns(10);
+		
 		setVisible(true);
 		new Thread(new Runnable(){
 			@Override
@@ -123,6 +169,10 @@ public class Frame extends JFrame implements ActionListener {
 			}).start();
 			btnUseIp.setEnabled(false);
 			btnUseTeam.setEnabled(false);
+		}else if(e.getSource() == btnPush){
+			if(!btnUseIp.isEnabled() && !btnUseTeam.isEnabled()){
+				NetworkTablesClient.push(textField_5.getText(),textField_3.getText(),textField_4.getText());
+			}
 		}
 	}
 	public void println(String text){
