@@ -328,6 +328,7 @@ public class NetworkTablesClient {
 			is.close();
 		}
 		jar.close();
+	}
 	public static void pushArray(String table, String key, String data) {
 		NetworkTable networkTable = instance.getTable(table);
 		if(!data.contains(":")){
