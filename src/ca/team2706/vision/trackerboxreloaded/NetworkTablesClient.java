@@ -2,10 +2,18 @@ package ca.team2706.vision.trackerboxreloaded;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Scanner;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -20,6 +28,7 @@ public class NetworkTablesClient {
 	public static String filter = "";
 	private static boolean done = false;
 	public static NetworkTableInstance instance;
+	public static ArrayList<SubProcess> processes = new ArrayList<SubProcess>();
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
@@ -44,7 +53,7 @@ public class NetworkTablesClient {
 		instance = NetworkTableInstance.getDefault();
 		instance.setUpdateRate(0.02);
 		instance.startClient(ip);
-
+		loadAddons();
 		while (true) {
 			NetworkTable root = instance.getTable(filter);
 			frame.clear();
@@ -79,7 +88,7 @@ public class NetworkTablesClient {
 		instance = NetworkTableInstance.getDefault();
 		instance.setUpdateRate(0.02);
 		instance.startClientTeam(team);
-
+		loadAddons();
 		while (true) {
 			NetworkTable root = instance.getTable(filter);
 			frame.clear();
@@ -212,16 +221,91 @@ public class NetworkTablesClient {
 		for (String key : table.getKeys()) {
 			NetworkTableEntry entry = table.getEntry(key);
 			if (entry.getValue().isString()) {
-				out.println(currentPath.substring(0,currentPath.length()-1) + ":" + key + ":" + entry.getValue().getString() + ":STRING");
+				out.println(currentPath.substring(0, currentPath.length() - 1) + ":" + key + ":"
+						+ entry.getValue().getString() + ":STRING");
 			} else if (entry.getValue().isDouble()) {
-				out.println(currentPath.substring(0,currentPath.length()-1) + ":" + key + ":" + entry.getValue().getDouble() + ":DOUBLE");
+				out.println(currentPath.substring(0, currentPath.length() - 1) + ":" + key + ":"
+						+ entry.getValue().getDouble() + ":DOUBLE");
 			} else if (entry.getValue().isBoolean()) {
-				out.println(currentPath.substring(0,currentPath.length()-1) + ":" + key + ":" + entry.getValue().getBoolean() + ":BOOLEAN");
+				out.println(currentPath.substring(0, currentPath.length() - 1) + ":" + key + ":"
+						+ entry.getValue().getBoolean() + ":BOOLEAN");
 			}
 		}
 		for (String subTable : table.getSubTables()) {
 			NetworkTable subtable = table.getSubTable(subTable);
 			recursiveSave(subtable, currentPath + subTable + "/", out);
 		}
+	}
+
+	@SuppressWarnings({ "deprecation", "resource" })
+	public static void loadAddons() {
+		File dir = new File("addons/");
+		if (dir.exists() && dir.isDirectory()) {
+			for (File f : dir.listFiles()) {
+				if (f.getName().endsWith(".jar")) {
+					File newFile = new File(f.getParentFile().getPath() + "/temp/");
+					try {
+						extractJar(f.getPath(), newFile.getPath());
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					try {
+						File programData = new File(newFile.getPath() + "/manifest.txt");
+						if (!programData.exists()) {
+							continue;
+						}
+						Scanner in = new Scanner(programData);
+
+						URL url = newFile.toURL();
+						URL[] urls = new URL[] { url };
+						ClassLoader cl = new URLClassLoader(urls);
+						Class<?> cls = cl.loadClass(in.nextLine());
+						in.close();
+						SubProcess process = (SubProcess) cls.newInstance();
+						processes.add(process);
+						process.start();
+						newFile.delete();
+					} catch (Exception e) {
+						e.printStackTrace();
+						continue;
+					}
+				}
+			}
+		}
+	}
+
+	public static void extractJar(String loc, String dest) throws IOException{
+		JarFile jar = new JarFile(new File(loc));
+		Enumeration<?> enumeration1 = jar.entries();
+		while(enumeration1.hasMoreElements()){
+			JarEntry file = (JarEntry) enumeration1.nextElement();
+			File f = new File(dest + java.io.File.separator + file.getName());
+			if(file.isDirectory()){
+				f.mkdir();
+				continue;
+			}
+		}
+		Enumeration<?> enumeration = jar.entries();
+		while (enumeration.hasMoreElements()) {
+			JarEntry file = (JarEntry) enumeration.nextElement();
+			File f = new File(dest + java.io.File.separator + file.getName());
+			if (file.isDirectory()) { // if its a directory, create it
+				f.mkdir();
+				continue;
+			}
+			InputStream is = jar.getInputStream(file); // get the input stream
+			if(!f.getParentFile().exists()){
+				f.getParentFile().mkdirs();
+			}
+			f.delete();
+			f.createNewFile();
+			FileOutputStream fos = new FileOutputStream(f);
+			while (is.available() > 0) {  // write contents of 'is' to 'fos'
+				fos.write(is.read());
+			}
+			fos.close();
+			is.close();
+		}
+		jar.close();
 	}
 }
