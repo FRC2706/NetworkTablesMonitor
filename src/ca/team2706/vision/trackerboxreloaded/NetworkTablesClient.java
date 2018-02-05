@@ -126,6 +126,27 @@ public class NetworkTablesClient {
 			} else if (entry.getValue().isBoolean()) {
 				frame.println(currentPath + key + ": " + (entry.getValue().getBoolean()));
 				System.out.println(currentPath + key + ": " + (entry.getValue().getBoolean()));
+			} else if (entry.getValue().isBooleanArray()) {
+				String data = "";
+				for (boolean b : entry.getValue().getBooleanArray()) {
+					data += b + " : ";
+				}
+				data = data.substring(0, data.length() - 3);
+				frame.println(currentPath + key + ": " + data);
+			} else if (entry.getValue().isDoubleArray()) {
+				String data = "";
+				for (double d : entry.getValue().getDoubleArray()) {
+					data += d + " : ";
+				}
+				data = data.substring(0, data.length() - 3);
+				frame.println(currentPath + key + ": " + data);
+			} else if (entry.getValue().isStringArray()) {
+				String data = "";
+				for (String s : entry.getValue().getStringArray()) {
+					data += s + " : ";
+				}
+				data = data.substring(0, data.length() - 3);
+				frame.println(currentPath + key + ": " + data);
 			}
 		}
 		for (String subTable : table.getSubTables()) {
@@ -307,5 +328,54 @@ public class NetworkTablesClient {
 			is.close();
 		}
 		jar.close();
+	public static void pushArray(String table, String key, String data) {
+		NetworkTable networkTable = instance.getTable(table);
+		if(!data.contains(":")){
+			if(isDouble(data)){
+				networkTable.getEntry(key).forceSetDoubleArray(new double[] {Double.valueOf(data)});
+			}else if(data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false")){
+				networkTable.getEntry(key).forceSetBooleanArray(new boolean[] {Boolean.valueOf(data)});
+			}else{
+				networkTable.getEntry(key).forceSetStringArray(new String[] {data});
+			}
+		}
+		boolean first = true;
+		boolean d = false;
+		boolean b = false;
+		boolean string = false;
+		String[] raw = data.split(":");
+		for (String s : raw) {
+			s = s.trim();
+			if (first) {
+				if(isDouble(s)){
+					d = true;
+				}else if(data.equalsIgnoreCase("true") || data.equalsIgnoreCase("false")){
+					b = true;
+				}else{
+					string = true;
+				}
+				first = false;
+				break;
+			}
+		}
+		if(d){
+			double[] da = new double[raw.length];
+			for(int i = 0; i < raw.length;i++){
+				da[i] = Double.valueOf(raw[i]);
+			}
+			networkTable.getEntry(key).forceSetDoubleArray(da);
+		}else if(b){
+			boolean[] ba = new boolean[raw.length];
+			for(int i = 0; i < raw.length;i++){
+				ba[i] = Boolean.valueOf(raw[i]);
+			}
+			networkTable.getEntry(key).forceSetBooleanArray(ba);
+		}else if(string){
+			String[] sa = new String[raw.length];
+			for(int i = 0; i < raw.length;i++){
+				sa[i] = raw[i];
+			}
+			networkTable.getEntry(key).forceSetStringArray(sa);
+		}
 	}
 }
