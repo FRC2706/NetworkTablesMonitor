@@ -15,3 +15,6 @@ out/
 *.iws
 *.iml
 *.ipr
+
+#Addon stuff we don't want in git
+addons/
