@@ -3,7 +3,7 @@ A tool for monitoring and debugging NetworkTables traffic on the robot.
 
 # Attribution and license
 
-2D Vision re-written in Java
+A tool for monitoring and debugging NetworkTables traffic on the robot.
 
 We release our software under the MIT license in the hopes that other teams use and/or modify our software.
 
