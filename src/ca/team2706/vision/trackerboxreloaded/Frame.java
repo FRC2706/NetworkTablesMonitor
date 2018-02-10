@@ -21,8 +21,8 @@ public class Frame extends JFrame implements ActionListener {
 	private JTextField txtIp;
 	private JTextField textField_1;
 	private JTextArea textArea;
-	private JButton btnUseTeam;
-	private JButton btnUseIp;
+	public JButton btnUseTeam;
+	public JButton btnUseIp;
 	private JTextField txtFilter;
 	private JTextField textField_2;
 	private JTextField txtKey;
@@ -35,6 +35,8 @@ public class Frame extends JFrame implements ActionListener {
 	private JButton btnSave;
 	private JButton btnLoad;
 	private JButton btnPushArray;
+	public JButton btnStartServer;
+	
 	public Frame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 300);
@@ -89,12 +91,12 @@ public class Frame extends JFrame implements ActionListener {
 		txtFilter = new JTextField();
 		txtFilter.setEditable(false);
 		txtFilter.setText("Filter:");
-		txtFilter.setBounds(456, 11, 45, 20);
+		txtFilter.setBounds(424, 34, 45, 20);
 		contentPane.add(txtFilter);
 		txtFilter.setColumns(10);
 		
 		textField_2 = new JTextField();
-		textField_2.setBounds(456, 34, 218, 20);
+		textField_2.setBounds(466, 34, 208, 20);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
@@ -154,6 +156,11 @@ public class Frame extends JFrame implements ActionListener {
 		btnPushArray.addActionListener(this);
 		contentPane.add(btnPushArray);
 		
+		btnStartServer = new JButton("Start Server");
+		btnStartServer.addActionListener(this);
+		btnStartServer.setBounds(456, -1, 111, 23);
+		contentPane.add(btnStartServer);
+		
 		setVisible(true);
 		new Thread(new Runnable(){
 			@Override
@@ -180,6 +187,7 @@ public class Frame extends JFrame implements ActionListener {
 			}).start();
 			btnUseIp.setEnabled(false);
 			btnUseTeam.setEnabled(false);
+			btnStartServer.setEnabled(false);
 		}else if(e.getSource() == btnUseTeam){
 			new Thread(new Runnable(){
 				public void run(){
@@ -188,6 +196,7 @@ public class Frame extends JFrame implements ActionListener {
 			}).start();
 			btnUseIp.setEnabled(false);
 			btnUseTeam.setEnabled(false);
+			btnStartServer.setEnabled(false);
 		}else if(e.getSource() == btnPush){
 			if(!btnUseIp.isEnabled() && !btnUseTeam.isEnabled()){
 				NetworkTablesClient.push(textField_5.getText(),textField_3.getText(),textField_4.getText());
@@ -204,6 +213,15 @@ public class Frame extends JFrame implements ActionListener {
 			if(!btnUseIp.isEnabled() && !btnUseTeam.isEnabled()){
 				NetworkTablesClient.pushArray(textField_5.getText(),textField_3.getText(),textField_4.getText());
 			}
+		}else if(e.getSource() == btnStartServer){
+			btnUseIp.setEnabled(false);
+			btnUseTeam.setEnabled(false);
+			btnStartServer.setEnabled(false);
+			new Thread(new Runnable(){
+				public void run(){
+					NetworkTablesClient.startServer();
+				}
+			}).start();
 		}
 	}
 	public void println(String text){
