@@ -33,15 +33,27 @@ public class NetworkTablesClient {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		frame = new Frame();
-		System.out.println("Would you like to enter a ip? Y/N");
+		System.out.println("Use ip/team#/server!");
 		Scanner scan = new Scanner(System.in);
 		String response = scan.nextLine();
-		if (response.equalsIgnoreCase("Y") || response.equalsIgnoreCase("YES")) {
+		if (response.equalsIgnoreCase("ip")) {
 			System.out.println("Enter a ip!");
+			frame.btnStartServer.setEnabled(false);
+			frame.btnUseIp.setEnabled(false);
+			frame.btnUseTeam.setEnabled(false);
 			useIp(scan.nextLine());
-		} else {
+		}else if(response.equalsIgnoreCase("team#")){
 			System.out.println("Enter a team #");
+			frame.btnStartServer.setEnabled(false);
+			frame.btnUseIp.setEnabled(false);
+			frame.btnUseTeam.setEnabled(false);
 			useTeam(Integer.valueOf(scan.nextLine()));
+		}else{
+			frame.btnStartServer.setEnabled(false);
+			frame.btnUseIp.setEnabled(false);
+			frame.btnUseTeam.setEnabled(false);
+			System.out.println("Starting a server!");
+			startServer();
 		}
 	}
 
@@ -377,6 +389,38 @@ public class NetworkTablesClient {
 				sa[i] = raw[i];
 			}
 			networkTable.getEntry(key).forceSetStringArray(sa);
+		}
+	}
+	public static void startServer(){
+		if (done) {
+			return;
+		}
+		done = true;
+		instance = NetworkTableInstance.getDefault();
+		instance.setUpdateRate(0.02);
+		instance.startServer();
+		loadAddons();
+		while (true) {
+			NetworkTable root = instance.getTable(filter);
+			frame.clear();
+			recursiveSearch(root, "");
+			/*
+			 * for(String key : root.getKeys()){ NetworkTableEntry entry =
+			 * root.getEntry(key); if(entry.getValue().isString()){
+			 * frame.println(key+": "+(entry.getValue().getString())); } }
+			 * for(String subTable : root.getSubTables()){ NetworkTable table =
+			 * root.getSubTable(subTable); for(String key : table.getKeys()){
+			 * if(table.getEntry(key).getValue().isString()){
+			 * frame.println(key+": "+(table.getEntry(key).getValue().getString(
+			 * ))); }else if(table.getEntry(key).getValue().isDouble()){
+			 * frame.println(key+": "+(table.getEntry(key).getValue().getDouble(
+			 * ))); } } }
+			 */
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
