@@ -277,6 +277,10 @@ public class NetworkTablesClient {
 			for (File f : dir.listFiles()) {
 				if (f.getName().endsWith(".jar")) {
 					File newFile = new File(f.getParentFile().getPath() + "/temp/");
+					if(newFile.exists() || !newFile.isDirectory()){
+						newFile.delete();
+						newFile.mkdir();
+					}
 					try {
 						extractJar(f.getPath(), newFile.getPath());
 					} catch (IOException e1) {
