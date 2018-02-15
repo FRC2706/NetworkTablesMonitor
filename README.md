@@ -1,6 +1,9 @@
 # NetworkTablesMonitor
 A tool for monitoring and debugging NetworkTables traffic on the robot.
 
+### Basic usage
+[Basic usage](https://github.com/FRC2706/NetworkTablesMonitor/wiki/Basic-usage)
+
 # Attribution and license
 
 A tool for monitoring and debugging NetworkTables traffic on the robot.
