@@ -36,6 +36,7 @@ public class Frame extends JFrame implements ActionListener {
 	private JButton btnLoad;
 	private JButton btnPushArray;
 	public JButton btnStartServer;
+	private JScrollPane scrollPane;
 	
 	public Frame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,7 +80,7 @@ public class Frame extends JFrame implements ActionListener {
 		btnUseIp.addActionListener(this);
 		contentPane.add(btnUseIp);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 31, 414, 219);
 		scrollPane.setAutoscrolls(true);
 		contentPane.add(scrollPane);
@@ -224,13 +225,29 @@ public class Frame extends JFrame implements ActionListener {
 			}).start();
 		}
 	}
-	public void println(String text){
-		textArea.append(text+System.lineSeparator());
-	}
-	public void clear(){
-		textArea.setText("");
-		for(int i = 0; i < 5; i++){
-			System.out.println();
+	public void println(String text, String key){
+		boolean found = false;
+		int scrollH = scrollPane.getHorizontalScrollBar().getValue();
+		int scrollV = scrollPane.getVerticalScrollBar().getValue();
+		for(String s : textArea.getText().split(System.lineSeparator())){
+			if(s.length() >= key.length() && s.substring(0,key.length()).equals(key)){
+				String string = "";
+				for(String s1 : textArea.getText().split(System.lineSeparator())){
+					if(!s1.equals(s)){
+						string += s1+System.lineSeparator();
+					}else{
+						string += text+System.lineSeparator();
+					}
+				}
+				textArea.setText(string);
+				scrollPane.getHorizontalScrollBar().setValue(scrollH);
+				scrollPane.getVerticalScrollBar().setValue(scrollV);
+				found = true;
+				break;
+			}
+		}
+		if(!found){
+			textArea.append(text+System.lineSeparator());
 		}
 	}
 }
