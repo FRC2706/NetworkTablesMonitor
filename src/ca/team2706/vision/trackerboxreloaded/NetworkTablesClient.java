@@ -30,31 +30,8 @@ public class NetworkTablesClient {
 	public static NetworkTableInstance instance;
 	public static ArrayList<SubProcess> processes = new ArrayList<SubProcess>();
 
-	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		frame = new Frame();
-		System.out.println("Use ip/team#/server!");
-		Scanner scan = new Scanner(System.in);
-		String response = scan.nextLine();
-		if (response.equalsIgnoreCase("ip")) {
-			System.out.println("Enter a ip!");
-			frame.btnStartServer.setEnabled(false);
-			frame.btnUseIp.setEnabled(false);
-			frame.btnUseTeam.setEnabled(false);
-			useIp(scan.nextLine());
-		}else if(response.equalsIgnoreCase("team#")){
-			System.out.println("Enter a team #");
-			frame.btnStartServer.setEnabled(false);
-			frame.btnUseIp.setEnabled(false);
-			frame.btnUseTeam.setEnabled(false);
-			useTeam(Integer.valueOf(scan.nextLine()));
-		}else{
-			frame.btnStartServer.setEnabled(false);
-			frame.btnUseIp.setEnabled(false);
-			frame.btnUseTeam.setEnabled(false);
-			System.out.println("Starting a server!");
-			startServer();
-		}
 	}
 
 	public static void useIp(String ip) {
@@ -68,7 +45,6 @@ public class NetworkTablesClient {
 		loadAddons();
 		while (true) {
 			NetworkTable root = instance.getTable(filter);
-			frame.clear();
 			recursiveSearch(root, "");
 
 			/*
@@ -103,7 +79,6 @@ public class NetworkTablesClient {
 		loadAddons();
 		while (true) {
 			NetworkTable root = instance.getTable(filter);
-			frame.clear();
 			recursiveSearch(root, "");
 			/*
 			 * for(String key : root.getKeys()){ NetworkTableEntry entry =
@@ -130,35 +105,35 @@ public class NetworkTablesClient {
 		for (String key : table.getKeys()) {
 			NetworkTableEntry entry = table.getEntry(key);
 			if (entry.getValue().isString()) {
-				frame.println(currentPath + key + ": " + (entry.getValue().getString()));
-				System.out.println(currentPath + key + ": " + (entry.getValue().getString()));
+				frame.println(currentPath + key + ": " + (entry.getValue().getString()),currentPath+key);
+				//System.out.println(currentPath + key + ": " + (entry.getValue().getString()));
 			} else if (entry.getValue().isDouble()) {
-				frame.println(currentPath + key + ": " + (entry.getValue().getDouble()));
-				System.out.println(currentPath + key + ": " + (entry.getValue().getDouble()));
+				frame.println(currentPath + key + ": " + (entry.getValue().getDouble()),currentPath+key);
+				//System.out.println(currentPath + key + ": " + (entry.getValue().getDouble()));
 			} else if (entry.getValue().isBoolean()) {
-				frame.println(currentPath + key + ": " + (entry.getValue().getBoolean()));
-				System.out.println(currentPath + key + ": " + (entry.getValue().getBoolean()));
+				frame.println(currentPath + key + ": " + (entry.getValue().getBoolean()),currentPath+key);
+				//System.out.println(currentPath + key + ": " + (entry.getValue().getBoolean()));
 			} else if (entry.getValue().isBooleanArray()) {
 				String data = "";
 				for (boolean b : entry.getValue().getBooleanArray()) {
 					data += b + " : ";
 				}
 				data = data.substring(0, data.length() - 3);
-				frame.println(currentPath + key + ": " + data);
+				frame.println(currentPath + key + ": " + data,currentPath+key);
 			} else if (entry.getValue().isDoubleArray()) {
 				String data = "";
 				for (double d : entry.getValue().getDoubleArray()) {
 					data += d + " : ";
 				}
 				data = data.substring(0, data.length() - 3);
-				frame.println(currentPath + key + ": " + data);
+				frame.println(currentPath + key + ": " + data,currentPath+key);
 			} else if (entry.getValue().isStringArray()) {
 				String data = "";
 				for (String s : entry.getValue().getStringArray()) {
 					data += s + " : ";
 				}
 				data = data.substring(0, data.length() - 3);
-				frame.println(currentPath + key + ": " + data);
+				frame.println(currentPath + key + ": " + data,currentPath+key);
 			}
 		}
 		for (String subTable : table.getSubTables()) {
@@ -199,7 +174,7 @@ public class NetworkTablesClient {
 				try {
 					saveFile.createNewFile();
 				} catch (IOException e) {
-					e.printStackTrace();
+					e.printStackTrace(); 
 				}
 				PrintWriter out = null;
 				try {
@@ -406,7 +381,6 @@ public class NetworkTablesClient {
 		loadAddons();
 		while (true) {
 			NetworkTable root = instance.getTable(filter);
-			frame.clear();
 			recursiveSearch(root, "");
 			/*
 			 * for(String key : root.getKeys()){ NetworkTableEntry entry =
