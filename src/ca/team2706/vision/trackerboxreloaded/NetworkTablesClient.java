@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -399,6 +401,51 @@ public class NetworkTablesClient {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	public static void connect(String ip, int port){
+		try{
+			Socket s = new Socket(ip,port);
+			out = new PrintWriter(s.getOutputStream(),true);
+			Scanner in = new Scanner(s.getInputStream());
+			while(!s.isClosed()){
+				frame.sPrintln(in.nextLine());
+			}
+			in.close();
+			s.close();
+		}catch (Exception e) {
+			frame.btnStartServer_1.setEnabled(true);
+			frame.btnConnect.setEnabled(true);
+			e.printStackTrace();
+			out = null;
+		}
+	}
+	public static PrintWriter out = null;
+	public static void startServer(int port){
+		try{
+			ServerSocket ss = new ServerSocket(port);
+			while(!ss.isClosed()){
+				Socket s = null;
+				try{
+					s = ss.accept();
+					frame.sPrintln("Connection from: "+s.getInetAddress().toString());
+					Scanner in = new Scanner(s.getInputStream());
+					out = new PrintWriter(s.getOutputStream(),true);
+					while(!s.isClosed()){
+						frame.sPrintln(in.nextLine());
+					}
+					in.close();
+				}catch(Exception e){
+					frame.sPrintln(s.getInetAddress().toString()+" Disconnected!");
+					out = null;
+				}
+			}
+			ss.close();
+		}catch (Exception e) {
+			frame.btnStartServer_1.setEnabled(true);
+			frame.btnConnect.setEnabled(true);
+			e.printStackTrace();
+			out = null;
 		}
 	}
 }

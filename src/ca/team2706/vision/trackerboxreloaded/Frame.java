@@ -3,13 +3,15 @@ package ca.team2706.vision.trackerboxreloaded;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.ScrollPaneConstants;
 
 public class Frame extends JFrame implements ActionListener {
 
@@ -37,6 +39,17 @@ public class Frame extends JFrame implements ActionListener {
 	private JButton btnPushArray;
 	public JButton btnStartServer;
 	private JScrollPane scrollPane;
+	private JTextField txtIp_1;
+	private JTextField textField_6;
+	private JTextField txtPort;
+	private JScrollPane scrollPane_1;
+	private JTextField txtText;
+	private JTextField textField_7;
+	private JScrollPane scrollPane_2;
+	private JButton btnSend;
+	public JButton btnConnect;
+	public JButton btnStartServer_1;
+	private JTextArea textArea_1;
 	
 	public Frame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,45 +58,156 @@ public class Frame extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(0, 0, 684, 261);
+		JPanel networkTables = new JPanel();
+		networkTables.setLayout(null);
+		JPanel socket = new JPanel();
+		socket.setLayout(null);
+		tabbedPane.addTab("Network Tables", networkTables);
+		tabbedPane.addTab("Sockets", socket);
 		
+		txtIp_1 = new JTextField();
+		txtIp_1.setText("Ip:");
+		txtIp_1.setEditable(false);
+		txtIp_1.setBounds(0, 0, 24, 20);
+		socket.add(txtIp_1);
+		txtIp_1.setColumns(10);
+		
+		textField_6 = new JTextField();
+		textField_6.setBounds(23, 0, 239, 20);
+		socket.add(textField_6);
+		textField_6.setColumns(10);
+		
+		txtPort = new JTextField();
+		txtPort.setEditable(false);
+		txtPort.setText("Port:");
+		txtPort.setBounds(272, 0, 36, 20);
+		socket.add(txtPort);
+		txtPort.setColumns(10);
+		
+		JTextField formattedTextField = new JTextField();
+		formattedTextField.setBounds(306, 0, 83, 20);
+		socket.add(formattedTextField);
+		
+		btnConnect = new JButton("Connect");
+		btnConnect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String ip = textField_6.getText();
+				String port = formattedTextField.getText();
+				if(isInt(port)){
+					btnConnect.setEnabled(false);
+					btnStartServer_1.setEnabled(false);
+					new Thread(new Runnable(){
+
+						@Override
+						public void run() {
+							NetworkTablesClient.connect(ip,Integer.valueOf(port));
+						}
+						
+					}).start();
+					
+				}
+			}
+		});
+		btnConnect.setBounds(405, -1, 89, 23);
+		socket.add(btnConnect);
+		
+		btnStartServer_1 = new JButton("Start Server");
+		btnStartServer_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String port = formattedTextField.getText();
+				if(isInt(port)){
+					btnConnect.setEnabled(false);
+					btnStartServer_1.setEnabled(false);
+					new Thread(new Runnable(){
+
+						@Override
+						public void run() {
+							NetworkTablesClient.startServer(Integer.valueOf(port));
+						}
+						
+					}).start();
+					
+				}
+			}
+		});
+		btnStartServer_1.setBounds(504, -1, 108, 23);
+		socket.add(btnStartServer_1);
+		
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 52, 379, 170);
+		socket.add(scrollPane_1);
+		
+		textArea_1 = new JTextArea();
+		textArea_1.setEditable(false);
+		scrollPane_1.setViewportView(textArea_1);
+		
+		txtText = new JTextField();
+		txtText.setEditable(false);
+		txtText.setText("Text:");
+		txtText.setBounds(405, 68, 41, 20);
+		socket.add(txtText);
+		txtText.setColumns(10);
+		
+		scrollPane_2 = new JScrollPane();
+		scrollPane_2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		scrollPane_2.setBounds(444, 68, 225, 20);
+		socket.add(scrollPane_2);
+		
+		textField_7 = new JTextField();
+		scrollPane_2.setViewportView(textField_7);
+		textField_7.setColumns(10);
+		
+		btnSend = new JButton("Send");
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(NetworkTablesClient.out != null){
+					NetworkTablesClient.out.println(textField_7.getText());
+					textField_7.setText("");
+				}
+			}
+		});
+		btnSend.setBounds(492, 106, 89, 23);
+		socket.add(btnSend);
 		txtTeam = new JTextField();
 		txtTeam.setEditable(false);
 		txtTeam.setText("team#");
 		txtTeam.setBounds(0, 0, 45, 20);
-		contentPane.add(txtTeam);
+		networkTables.add(txtTeam);
 		txtTeam.setColumns(10);
 		
 		textField = new JTextField();
 		textField.setBounds(44, 0, 86, 20);
-		contentPane.add(textField);
+		networkTables.add(textField);
 		textField.setColumns(10);
 		
 		btnUseTeam = new JButton("Use team #");
 		btnUseTeam.setBounds(132, -1, 100, 23);
 		btnUseTeam.addActionListener(this);
-		contentPane.add(btnUseTeam);
+		networkTables.add(btnUseTeam);
 		
 		txtIp = new JTextField();
 		txtIp.setEditable(false);
 		txtIp.setText("ip:");
 		txtIp.setBounds(242, 0, 23, 20);
-		contentPane.add(txtIp);
+		networkTables.add(txtIp);
 		txtIp.setColumns(10);
 		
 		textField_1 = new JTextField();
 		textField_1.setBounds(264, 0, 86, 20);
-		contentPane.add(textField_1);
+		networkTables.add(textField_1);
 		textField_1.setColumns(10);
 		
 		btnUseIp = new JButton("Use IP");
 		btnUseIp.setBounds(357, -1, 89, 23);
 		btnUseIp.addActionListener(this);
-		contentPane.add(btnUseIp);
+		networkTables.add(btnUseIp);
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 31, 414, 219);
 		scrollPane.setAutoscrolls(true);
-		contentPane.add(scrollPane);
+		networkTables.add(scrollPane);
 		
 		textArea = new JTextArea();
 		textArea.setEditable(false);
@@ -93,74 +217,76 @@ public class Frame extends JFrame implements ActionListener {
 		txtFilter.setEditable(false);
 		txtFilter.setText("Filter:");
 		txtFilter.setBounds(424, 34, 45, 20);
-		contentPane.add(txtFilter);
+		networkTables.add(txtFilter);
 		txtFilter.setColumns(10);
 		
 		textField_2 = new JTextField();
 		textField_2.setBounds(466, 34, 208, 20);
-		contentPane.add(textField_2);
+		networkTables.add(textField_2);
 		textField_2.setColumns(10);
 		
 		txtKey = new JTextField();
 		txtKey.setEditable(false);
 		txtKey.setText("Key:");
 		txtKey.setBounds(456, 139, 32, 20);
-		contentPane.add(txtKey);
+		networkTables.add(txtKey);
 		txtKey.setColumns(10);
 		
 		textField_3 = new JTextField();
 		textField_3.setBounds(456, 157, 218, 20);
-		contentPane.add(textField_3);
+		networkTables.add(textField_3);
 		textField_3.setColumns(10);
 		
 		txtData = new JTextField();
 		txtData.setEditable(false);
 		txtData.setText("Data:");
 		txtData.setBounds(456, 188, 39, 20);
-		contentPane.add(txtData);
+		networkTables.add(txtData);
 		txtData.setColumns(10);
 		
 		textField_4 = new JTextField();
 		textField_4.setBounds(456, 207, 218, 20);
-		contentPane.add(textField_4);
+		networkTables.add(textField_4);
 		textField_4.setColumns(10);
 		
 		btnPush = new JButton("Push");
 		btnPush.setBounds(456, 238, 89, 23);
 		btnPush.addActionListener(this);
-		contentPane.add(btnPush);
+		networkTables.add(btnPush);
 		
 		textField_5 = new JTextField();
 		textField_5.setBounds(456, 115, 218, 20);
-		contentPane.add(textField_5);
+		networkTables.add(textField_5);
 		textField_5.setColumns(10);
 		
 		txtTable = new JTextField();
 		txtTable.setEditable(false);
 		txtTable.setText("Table:");
 		txtTable.setBounds(456, 95, 45, 20);
-		contentPane.add(txtTable);
+		networkTables.add(txtTable);
 		txtTable.setColumns(10);
 		
 		btnSave = new JButton("Save");
 		btnSave.setBounds(456, 65, 89, 23);
 		btnSave.addActionListener(this);
-		contentPane.add(btnSave);
+		networkTables.add(btnSave);
 		
 		btnLoad = new JButton("Load");
 		btnLoad.addActionListener(this);
 		btnLoad.setBounds(585, 65, 89, 23);
-		contentPane.add(btnLoad);
+		networkTables.add(btnLoad);
 		
 		btnPushArray = new JButton("Push Array");
 		btnPushArray.setBounds(563, 238, 111, 23);
 		btnPushArray.addActionListener(this);
-		contentPane.add(btnPushArray);
+		networkTables.add(btnPushArray);
 		
 		btnStartServer = new JButton("Start Server");
 		btnStartServer.addActionListener(this);
 		btnStartServer.setBounds(456, -1, 111, 23);
-		contentPane.add(btnStartServer);
+		networkTables.add(btnStartServer);
+		
+		contentPane.add(tabbedPane);
 		
 		setVisible(true);
 		new Thread(new Runnable(){
@@ -248,6 +374,18 @@ public class Frame extends JFrame implements ActionListener {
 		}
 		if(!found){
 			textArea.append(text+System.lineSeparator());
+		}
+	}
+	public void sPrintln(String text){
+		textArea_1.append(text+System.lineSeparator());
+	}
+	@SuppressWarnings("unused")
+	private boolean isInt(String port) {
+		try{
+			int i = Integer.valueOf(port);
+			return true;
+		}catch(Exception e){
+			return false;
 		}
 	}
 }
