@@ -406,16 +406,27 @@ public class NetworkTablesClient {
 	public static void connect(String ip, int port){
 		try{
 			Socket s = new Socket(ip,port);
+			try{
 			out = new PrintWriter(s.getOutputStream(),true);
 			Scanner in = new Scanner(s.getInputStream());
+			frame.sPrintln("Connected to: "+s.getInetAddress().toString());
 			while(!s.isClosed()){
 				frame.sPrintln(in.nextLine());
 			}
 			in.close();
+			}catch(Exception e){
+				frame.sPrintln("Disconnected from: "+s.getInetAddress().toString());
+				frame.btnStartServer_1.setEnabled(true);
+				frame.btnConnect.setEnabled(true);
+				frame.btnSend.setEnabled(false);
+				e.printStackTrace();
+				out = null;
+			}
 			s.close();
 		}catch (Exception e) {
 			frame.btnStartServer_1.setEnabled(true);
 			frame.btnConnect.setEnabled(true);
+			frame.btnSend.setEnabled(false);
 			e.printStackTrace();
 			out = null;
 		}
@@ -444,6 +455,7 @@ public class NetworkTablesClient {
 		}catch (Exception e) {
 			frame.btnStartServer_1.setEnabled(true);
 			frame.btnConnect.setEnabled(true);
+			frame.btnSend.setEnabled(false);
 			e.printStackTrace();
 			out = null;
 		}

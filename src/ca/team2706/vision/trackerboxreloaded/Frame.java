@@ -46,7 +46,7 @@ public class Frame extends JFrame implements ActionListener {
 	private JTextField txtText;
 	private JTextField textField_7;
 	private JScrollPane scrollPane_2;
-	private JButton btnSend;
+	public JButton btnSend;
 	public JButton btnConnect;
 	public JButton btnStartServer_1;
 	private JTextArea textArea_1;
@@ -98,6 +98,7 @@ public class Frame extends JFrame implements ActionListener {
 				if(isInt(port)){
 					btnConnect.setEnabled(false);
 					btnStartServer_1.setEnabled(false);
+					btnSend.setEnabled(true);
 					new Thread(new Runnable(){
 
 						@Override
@@ -120,6 +121,7 @@ public class Frame extends JFrame implements ActionListener {
 				if(isInt(port)){
 					btnConnect.setEnabled(false);
 					btnStartServer_1.setEnabled(false);
+					btnSend.setEnabled(true);
 					new Thread(new Runnable(){
 
 						@Override
@@ -160,6 +162,7 @@ public class Frame extends JFrame implements ActionListener {
 		textField_7.setColumns(10);
 		
 		btnSend = new JButton("Send");
+		btnSend.setEnabled(false);
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(NetworkTablesClient.out != null){
