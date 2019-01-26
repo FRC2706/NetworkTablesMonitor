@@ -59,7 +59,7 @@ public class Frame extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 684, 261);
+		tabbedPane.setBounds(0, 0, 684, 304);
 		JPanel networkTables = new JPanel();
 		networkTables.setLayout(null);
 		JPanel socket = new JPanel();
