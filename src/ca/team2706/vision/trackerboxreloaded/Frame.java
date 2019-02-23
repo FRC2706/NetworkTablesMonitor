@@ -296,7 +296,10 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void run() {
 				while(true){
-					NetworkTablesClient.filter = textField_2.getText();
+					if(!NetworkTablesClient.filter.equals(textField_2.getText())) {
+						NetworkTablesClient.filter = textField_2.getText();
+						textArea.setText("");
+					}
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {

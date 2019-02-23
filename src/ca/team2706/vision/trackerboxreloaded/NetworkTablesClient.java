@@ -47,7 +47,7 @@ public class NetworkTablesClient {
 		loadAddons();
 		while (true) {
 			NetworkTable root = instance.getTable(filter);
-			recursiveSearch(root, "");
+			recursiveSearch(root, filter+"/");
 
 			/*
 			 * for(String key : vision.getKeys()){ NetworkTableEntry entry =
@@ -81,7 +81,7 @@ public class NetworkTablesClient {
 		loadAddons();
 		while (true) {
 			NetworkTable root = instance.getTable(filter);
-			recursiveSearch(root, "");
+			recursiveSearch(root, filter+"/");
 			/*
 			 * for(String key : root.getKeys()){ NetworkTableEntry entry =
 			 * root.getEntry(key); if(entry.getValue().isString()){
@@ -383,7 +383,7 @@ public class NetworkTablesClient {
 		loadAddons();
 		while (true) {
 			NetworkTable root = instance.getTable(filter);
-			recursiveSearch(root, "");
+			recursiveSearch(root, filter+"/");
 			/*
 			 * for(String key : root.getKeys()){ NetworkTableEntry entry =
 			 * root.getEntry(key); if(entry.getValue().isString()){
