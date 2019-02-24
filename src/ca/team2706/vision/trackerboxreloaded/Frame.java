@@ -59,7 +59,7 @@ public class Frame extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 684, 261);
+		tabbedPane.setBounds(0, 0, 684, 304);
 		JPanel networkTables = new JPanel();
 		networkTables.setLayout(null);
 		JPanel socket = new JPanel();
@@ -296,7 +296,10 @@ public class Frame extends JFrame implements ActionListener {
 			@Override
 			public void run() {
 				while(true){
-					NetworkTablesClient.filter = textField_2.getText();
+					if(!NetworkTablesClient.filter.equals(textField_2.getText())) {
+						NetworkTablesClient.filter = textField_2.getText();
+						textArea.setText("");
+					}
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
